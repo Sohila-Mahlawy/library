@@ -46,6 +46,13 @@
             color: #4a90e2;
         }
 
+        /* Warning sign */
+        .warning {
+            color: #e94e77;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
         /* No books message */
         li:last-child {
             text-align: center;
@@ -95,7 +102,10 @@
         {% for borrow in borrowed_books %}
             <li>
                 <div>
-                    <strong>{{ borrow.book.title }}</strong> - Due on {{ borrow.due_date }}
+                    <strong>{{ borrow.book.title }}</strong> - Due on {{ borrow.due_date|date:"M. d, Y" }}
+                    {% if borrow.due_date|date:"M. d, Y" == today_date %}
+                        <span class="warning">⚠️ Due Today!</span>
+                    {% endif %}
                 </div>
                 <form action="{% url 'return_book' borrow.pk %}" method="post">
                     {% csrf_token %}

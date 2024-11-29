@@ -6,6 +6,7 @@ from django.urls import reverse
 from .forms import UserRegisterForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.utils.timezone import now
 
 def register(request):
     if request.method == 'POST':
@@ -42,7 +43,11 @@ def user_logout(request):
 
 def user_dashboard(request):
     borrowed_books = Borrow.objects.filter(user=request.user)
-    return render(request, 'user_dashboard.html', {'borrowed_books': borrowed_books})
+    today_date = now().strftime("%b. %d, %Y")  # Format today's date like the database
+    return render(request, 'user_dashboard.html', {
+        'borrowed_books': borrowed_books,
+        'today_date': today_date
+    })
 
 
 
